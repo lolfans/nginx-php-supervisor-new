@@ -9,8 +9,8 @@ RUN  apk add supervisor \
 	&& rm -rf /var/cache/apk/*
 
 # composer
-RUN curl -sS https://getcomposer.org/installer | \
-php -- --install-dir=/usr/bin/ --filename=composer
+#RUN curl -sS https://getcomposer.org/installer | \
+#php -- --install-dir=/usr/bin/ --filename=composer
 	
 	
 COPY ./supervisor/conf.d /etc/supervisor/conf.d	
