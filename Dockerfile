@@ -5,8 +5,7 @@ RUN docker-php-ext-install  pdo_mysql \
 && docker-php-ext-install  tokenizer \
 && docker-php-ext-install  gd \
 && docker-php-ext-install  mongodb \
-&& docker-php-ext-install  zmq \
-&& docker-php-ext-install  xmlreader 
+
 #命令越少,镜像层数越少,镜像也越小 所以&&可以适当用
 RUN mkdir -p /run/nginx/ && apk add nginx
 
