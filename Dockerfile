@@ -2,8 +2,8 @@
 FROM php:7.2.19-fpm-alpine3.10
 
 #官方安装拓展方式
-RUN docker-php-ext-install  pdo_mysql 
-#&& docker-php-ext-install  tokenizer \
+RUN docker-php-ext-install  pdo_mysql \
+&& docker-php-ext-install  tokenizer \
 #&& docker-php-ext-install  mongodb 
 
 #命令越少,镜像层数越少,镜像也越小 所以&&可以适当用
