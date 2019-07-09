@@ -16,8 +16,7 @@ php -- --install-dir=/usr/bin/ --filename=composer
 COPY ./supervisor/conf.d /etc/supervisor/conf.d	
 COPY ./crontabs/default /var/spool/cron/crontabs/
 
-COPY ./php/php-fpm.conf /usr/local/etc/
-COPY ./php/www.conf //usr/local/etc/php-fpm.d/
+COPY ./php/www.conf /usr/local/etc/php-fpm.d/
 COPY ./php/index.php /var/www/html/
 
 COPY ./nginx/default.conf /etc/nginx/conf.d/
