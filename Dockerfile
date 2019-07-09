@@ -1,9 +1,7 @@
 #官方php镜像
 FROM php:7.2.19-fpm-alpine3.10
 
-RUN docker-php-ext-install  pdo_mysql \
-&& docker-php-ext-install redis 
-
+RUN docker-php-ext-install  pdo_mysql 
 #命令越少,镜像层数越少,镜像也越小 所以&&可以适当用
 RUN mkdir -p /run/nginx/ && apk add nginx
 
