@@ -21,7 +21,7 @@ COPY ./php/www.conf //usr/local/etc/php-fpm.d/
 COPY ./php/index.php /var/www/html/
 
 COPY ./nginx/default.conf /etc/nginx/conf.d/
-COPY ./nginx/ssl.default.conf /etc/nginx/conf.d/
+COPY ./nginx/ssl.default.config /etc/nginx/conf.d/
 COPY ./nginx/nginx.conf /etc/nginx/
 
 
