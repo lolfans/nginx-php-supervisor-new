@@ -13,3 +13,6 @@ php -- --install-dir=/usr/bin/ --filename=composer
 	
 COPY ./supervisor/conf.d /etc/supervisor/conf.d	
 COPY ./crontabs/default /var/spool/cron/crontabs/
+
+
+ENTRYPOINT ["supervisord", "--nodaemon", "--configuration", "/etc/supervisor/conf.d/supervisord.conf"]
