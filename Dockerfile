@@ -2,31 +2,11 @@
 FROM php:7.2.19-fpm-alpine3.10
 
 #官方安装拓展方式
-#RUN docker-php-ext-install  pdo_mysql 
-#&& docker-php-ext-install  tokenizer \
-#&& docker-php-ext-install  mongodb
+RUN docker-php-ext-install  pdo_mysql \
+&&  docker-php-ext-install gd
 
-
-RUN   echo '@community http://mirrors.aliyun.com/alpine/latest-stable/community' >> /etc/apk/repositories 
 ENV TIMEZONE Asia/Shanghai
 
-RUN apk update \
-	&& apk upgrade \
-	&& apk add \
-	php7-redis@community\
-	php7-tokenizer@community \
-	php7-gd@community \
-	php7-mongodb@community \
-	php7-fileinfo@community \
-	php7-zmq@community \
-	php7-memcached@community \
-	php7-fpm@community \
-	php7-xmlreader@community \
- 	&& cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
-	&& echo "${TIMEZONE}" > /etc/timezone \
-	&& apk del tzdata \
-    && rm -rf /var/cache/apk/*
-	
 # Set environments
 #RUN sed -i "s|;*date.timezone =.*|date.timezone = ${TIMEZONE}|i" /usr/local/etc/php7/php.ini 	
 
