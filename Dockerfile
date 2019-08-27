@@ -3,7 +3,7 @@ FROM php:7.2.19-fpm-alpine3.10
 
 #官方安装拓展方式
 
-#RUN docker-php-ext-install  pdo_mysql 
+RUN docker-php-ext-install  pdo_mysql 
 #RUN docker-php-ext-install pcntl
 #RUN docker-php-ext-install opcache
 
