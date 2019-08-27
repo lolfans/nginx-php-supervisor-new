@@ -1,0 +1,213 @@
+sed -i "s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g" /etc/apk/repositories
+
+apk add --no-cache autoconf g++ libtool make curl-dev libxml2-dev linux-headers
+
+echo "---------- Install mcrypt ----------"
+apk add --no-cache libmcrypt-dev
+docker-php-ext-install mcrypt
+
+echo "---------- Install pdo_mysql ----------"
+docker-php-ext-install -j 2 pdo_mysql
+
+echo "---------- Install zip ----------"
+docker-php-ext-install -j 2 zip
+
+echo "---------- Install pcntl ----------"
+docker-php-ext-install -j 2 pcntl
+
+
+echo "---------- Install mysqli ----------"
+docker-php-ext-install -j 2 mysqli
+
+
+echo "---------- Install mbstring ----------"
+docker-php-ext-install -j 2 mbstring
+
+echo "---------- Install exif ----------"
+docker-php-ext-install -j 2 exif
+
+echo "---------- Install calendar ----------"
+docker-php-ext-install -j 2 calendar
+
+echo "---------- Install sockets ----------"
+docker-php-ext-install -j 2 sockets
+
+echo "---------- Install gettext ----------"
+apk add --no-cache gettext-dev
+docker-php-ext-install -j 2 gettext
+
+echo "---------- Install shmop ----------"
+docker-php-ext-install -j 2 shmop
+
+echo "---------- Install bz2 ----------"
+apk add --no-cache bzip2-dev
+docker-php-ext-install -j 2 bz2
+
+echo "---------- Install xsl ----------"
+apk add --no-cache libxslt-dev
+docker-php-ext-install -j 2 xsl
+
+echo "---------- Install wddx ----------"
+apk add --no-cache libxslt-dev
+ocker-php-ext-install -j 2 wddx
+
+echo "---------- Install curl ----------"
+docker-php-ext-install -j 2 curl
+
+echo "---------- Install mysql ----------"
+docker-php-ext-install -j 2 mysql
+
+echo "---------- Install wddx ----------"
+docker-php-ext-install -j 2 wddx
+
+echo "---------- Install readline ----------"
+apk add --no-cache readline-dev
+apk add --no-cache libedit-dev
+docker-php-ext-install -j 2 readline
+
+echo "---------- Install gmp ----------"
+apk add --no-cache gmp-dev
+docker-php-ext-install -j 2 gmp
+
+echo "---------- Install ldap ----------"
+apk add --no-cache ldb-dev
+apk add --no-cache openldap-dev
+docker-php-ext-install -j 2 ldap
+
+echo "---------- Install redis ----------"
+mkdir redis \
+&& tar -xf redis-4.1.1.tgz -C redis --strip-components=1 \
+&& ( cd redis && phpize && ./configure && make && make install ) \
+&& docker-php-ext-enable redis
+
+echo "---------- Install gd ----------"
+apk add --no-cache freetype-dev libjpeg-turbo-dev libpng-dev \
+&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+&& docker-php-ext-install -j 2 gd
+
+echo "---------- Install mhash ----------"
+mkdir mhash \
+&& tar -xf mhash-0.9.9.9.tar.gz -C mhash --strip-components=1 \
+&& ( cd mhash  && ./configure && make && make install )\
+&& docker-php-source extract \
+&& ( cd /usr/src/php && ./configure --with-mcrypt --with-mhash=/usr/local/include && make && make install )\
+&& docker-php-source delete
+ ———————————————— 
+版权声明：本文为CSDN博主「打卤」的原创文章，遵循CC 4.0 by-sa版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/liyyzz33/article/details/97265262
+
+
+--------------------------------------------------------------------------
+1. PHP 源码
+
+为了保证 Docker 镜像尽量小，PHP 的源文件是以压缩包的形式存在镜像中，官方提供了 docker-php-source 快捷脚本，用于对源文件压缩包的解压（extract）及解压后的文件进行删除（delete）的操作。
+
+示例：
+
+FROM php:7.1-apache
+
+RUN docker-php-source extract \
+
+# 此处开始执行你需要的操作 \
+
+&& docker-php-source delete
+
+注意：一定要记得删除，否则解压出来的文件会大大增加镜像的文件大小。
+
+2. 安装扩展
+
+2.1. 核心扩展
+
+这里主要用到的是官方提供的 docker-php-ext-configure 和 docker-php-ext-install 快捷脚本，如下
+
+FROM php:7.1-fpmRUN
+
+apt-get update \
+
+# 相关依赖必须手动安装 && apt-get install -y \
+
+libfreetype6-dev \
+
+libjpeg62-turbo-dev \
+
+libmcrypt-dev \
+
+libpng-dev \
+
+# 安装扩展
+
+&& docker-php-ext-install -j$(nproc) iconv mcrypt \
+
+# 如果安装的扩展需要自定义配置时
+
+&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+
+&& docker-php-ext-install -j$(nproc) gd
+
+注意：这里的 docker-php-ext-configure 和 docker-php-ext-install 已经包含了 docker-php-source 的操作，所有不需要再手动去执行。
+
+2.2. PECL 扩展
+
+因为一些扩展并不包含在 PHP 源码文件中，所有需要使用 PECL（PHP 的扩展库仓库，通过 PEAR 打包）。用 pecl install 安装扩展，然后再用官方提供的 docker-php-ext-enable 快捷脚本来启用扩展，如下示例
+
+FROM php:7.1-fpmRUN
+
+apt-get update \
+
+# 手动安装依赖
+
+&& apt-get install -y libmemcached-dev zlib1g-dev \
+
+# 安装需要的扩展
+
+&& pecl install memcached-2.2.0 \
+
+# 启用扩展
+
+&& docker-php-ext-enable memcached
+
+2.3. 其它扩展
+
+一些既不在 PHP 源码包，也不再 PECL 扩展仓库中的扩展，可以通过下载扩展程序源码，编译安装的方式安装，如下示例：
+
+FROM php:5.6-apacheRUN
+
+curl -fsSL 'https://xcache.lighttpd.net/pub/Releases/3.2.0/xcache-3.2.0.tar.gz' -o xcache.tar.gz \
+
+&& mkdir -p xcache \
+
+&& tar -xf xcache.tar.gz -C xcache --strip-components=1 \
+
+&& rm xcache.tar.gz \
+
+&& ( \ cd xcache \
+
+&& phpize \
+
+&& ./configure --enable-xcache \
+
+&& make -j$(nproc) \
+
+&& make install \ ) \
+
+&& rm -r xcache \
+
+&& docker-php-ext-enable xcache
+
+注意：官方提供的 docker-php-ext-* 脚本接受任意的绝对路径（不支持相对路径，以便与系统内置的扩展程序进行区分），所以，上面的例子也可以这样写：
+
+FROM php:5.6-apacheRUN
+
+curl -fsSL 'https://xcache.lighttpd.net/pub/Releases/3.2.0/xcache-3.2.0.tar.gz' -o xcache.tar.gz \
+
+&& mkdir -p /tmp/xcache \
+
+&& tar -xf xcache.tar.gz -C /tmp/xcache --strip-components=1 \
+
+&& rm xcache.tar.gz \
+
+&& docker-php-ext-configure /tmp/xcache --enable-xcache \
+
+&& docker-php-ext-install /tmp/xcache \
+
+&& rm -r /tmp/xcache
