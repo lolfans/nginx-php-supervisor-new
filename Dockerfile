@@ -51,16 +51,15 @@ RUN apk update && apk upgrade && apk add \
 	    php7-redis@community\
 	    php7-tokenizer@community \
 	    php7-gd@community \
-		php7-mongodb@community \
 		php7-fileinfo@community \
 		php7-zmq@community \
 		php7-memcached@community \
 		php7-xmlreader@community \
 		php7-fpm@community \
- 	&& cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
-	&& echo "${TIMEZONE}" > /etc/timezone \
-	&& apk del tzdata \
- 	&& rm -rf /var/cache/apk/*
+		&& cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
+		&& echo "${TIMEZONE}" > /etc/timezone \
+		&& apk del tzdata \
+		&& rm -rf /var/cache/apk/*
 
 RUN sed -i "s|;*date.timezone =.*|date.timezone = ${TIMEZONE}|i" /etc/php7/php.ini && \
 	sed -i "s|;*memory_limit =.*|memory_limit = ${PHP_MEMORY_LIMIT}|i" /etc/php7/php.ini && \
