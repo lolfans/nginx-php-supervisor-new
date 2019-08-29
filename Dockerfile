@@ -71,7 +71,12 @@ RUN sed -i "s|;*date.timezone =.*|date.timezone = ${TIMEZONE}|i" /etc/php7/php.i
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php	
 	
 	
+#NGINX
+RUN mkdir -p /run/nginx/ && apk add nginx
 
+#SUPERVISOR
+RUN  apk add supervisor && rm -rf /var/cache/apk/*
+	
 #COMPOSER 
 RUN curl -sS https://getcomposer.org/installer | \
 php -- --install-dir=/usr/bin/ --filename=composer
