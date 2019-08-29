@@ -9,7 +9,7 @@ RUN echo '@community https://mirrors.aliyun.com/alpine/edge/community' >> /etc/a
 ENV TIMEZONE            Asia/Shanghai
 ENV PHP_MEMORY_LIMIT    512M
 ENV MAX_UPLOAD          50M
-ENV PHP_MAX_FILE_UPLOAD 200
+ENV PHP_MAX_FILE_UPLOAD 200M
 ENV PHP_MAX_POST        100M
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
