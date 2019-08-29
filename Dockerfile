@@ -15,7 +15,7 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 
 
 RUN apk update && apk upgrade && apk add \
-		gnu-libiconv \
+		gnu-libiconv@community \
 		curl \
 		tzdata \
 	    php7@community \
@@ -72,7 +72,7 @@ ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 	
 	
 #NGINX
-RUN mkdir -p /run/nginx/ && apk add nginx
+RUN  apk add nginx
 
 #SUPERVISOR
 RUN  apk add supervisor && rm -rf /var/cache/apk/*
