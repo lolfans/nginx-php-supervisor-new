@@ -72,10 +72,10 @@ ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 	
 	
 #NGINX
-RUN  apk add nginx
+RUN apk add nginx
 
 #SUPERVISOR
-RUN  apk add supervisor && rm -rf /var/cache/apk/*
+RUN apk add supervisor && rm -rf /var/cache/apk/*
 	
 #COMPOSER 
 RUN curl -sS https://getcomposer.org/installer | \
