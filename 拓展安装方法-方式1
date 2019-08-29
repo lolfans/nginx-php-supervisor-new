@@ -1,3 +1,7 @@
+首先声明：推荐 按照本目录下的Dockerfile的方式安装php,nginx,supervisor等
+如果是按本目录下的Dockerfile-1的安装方式，即从官方PHP拉取镜像 后再安装其他例如composer,nginx,suervisor等 就会遇到一个问题，PHP拓展安装太过麻烦，我寻找过甚多资料，以下是安装拓展的方式，成不成功看天意。
+
+
 sed -i "s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g" /etc/apk/repositories
 
 apk add --no-cache autoconf g++ libtool make curl-dev libxml2-dev linux-headers
