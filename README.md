@@ -1,5 +1,5 @@
 # nginx-php-supervisor-new
-制作PHP镜像的方式 将代码克隆到docker环境的主机
+制作NGINX+PHP环境镜像的方式 将代码克隆到docker环境的主机
 
 git clone https://github.com/lolfans/nginx-php-supervisor-new.git
 
