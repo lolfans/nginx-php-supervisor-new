@@ -1,9 +1,10 @@
 #https://mirrors.aliyun.com/alpine/
-FROM alpine:edge
+FROM alpine:3.10
 
 MAINTAINER lolfans <313273766@qq.com>
 
 RUN echo '@community https://mirrors.aliyun.com/alpine/edge/community' >> /etc/apk/repositories
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 # Environments
 ENV TIMEZONE            Asia/Shanghai
@@ -56,10 +57,12 @@ RUN apk update && apk upgrade && apk add \
 		php7-memcached@community \
 		php7-xmlreader@community \
 		php7-fpm@community \
-		&& cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
-		&& echo "${TIMEZONE}" > /etc/timezone \
 		&& apk del tzdata \
 		&& rm -rf /var/cache/apk/*
+
+
+# /etc/localtime \
+# {TIMEZONE}" > /etc/timezone \
 
 RUN sed -i "s|;*date.timezone =.*|date.timezone = ${TIMEZONE}|i" /etc/php7/php.ini && \
 	sed -i "s|;*memory_limit =.*|memory_limit = ${PHP_MEMORY_LIMIT}|i" /etc/php7/php.ini && \
@@ -67,10 +70,7 @@ RUN sed -i "s|;*date.timezone =.*|date.timezone = ${TIMEZONE}|i" /etc/php7/php.i
 	sed -i "s|;*max_file_uploads =.*|max_file_uploads = ${PHP_MAX_FILE_UPLOAD}|i" /etc/php7/php.ini && \
 	sed -i "s|;*post_max_size =.*|post_max_size = ${PHP_MAX_POST}|i" /etc/php7/php.ini && \
 	sed -i "s|;*cgi.fix_pathinfo=.*|cgi.fix_pathinfo= 0|i" /etc/php7/php.ini
-	
-ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php	
-	
-	
+
 #NGINX
 RUN apk add nginx
 
@@ -86,13 +86,13 @@ COPY ./supervisor/conf.d /etc/supervisor/conf.d
 COPY ./crontabs/default /var/spool/cron/crontabs/
 
 
-COPY ./php/index.php /var/www/html/
-COPY ./php/php-fpm.conf /etc/php7/
-COPY ./php/www.conf /etc/php7/php-fpm.d/
+#COPY ./php/index.php /var/www/html/
+#COPY ./php/php-fpm.conf /etc/php7/
+#COPY ./php/www.conf /etc/php7/php-fpm.d/
 
-COPY ./nginx/default.conf /etc/nginx/conf.d/
+#COPY ./nginx/default.conf /etc/nginx/conf.d/
 #COPY ./nginx/ssl.default.config /etc/nginx/conf.d/
-COPY ./nginx/nginx.conf /etc/nginx/
+#COPY ./nginx/nginx.conf /etc/nginx/
 
 WORKDIR /var/www/html/
 
