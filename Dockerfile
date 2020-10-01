@@ -3,7 +3,9 @@ FROM alpine:3.10
 
 MAINTAINER lolfans <313273766@qq.com>
 
+#添加阿里云的alpine镜像源
 RUN echo '@community https://mirrors.aliyun.com/alpine/v3.10/community' >> /etc/apk/repositories
+#将国际源都换成阿里源
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 # Environments
@@ -14,7 +16,7 @@ ENV PHP_MAX_FILE_UPLOAD 200
 ENV PHP_MAX_POST        100M
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
-
+#更新源并安装需要的软件包
 RUN apk update && apk upgrade && apk add \
 	    	gnu-libiconv@community \
 	    	php7-curl@community \
@@ -71,26 +73,21 @@ RUN	sed -i "s|;*date.timezone =.*|date.timezone = ${TIMEZONE}|i" /etc/php7/php.i
 	sed -i "s|;*post_max_size =.*|post_max_size = ${PHP_MAX_POST}|i" /etc/php7/php.ini && \
 	sed -i "s|;*cgi.fix_pathinfo=.*|cgi.fix_pathinfo= 0|i" /etc/php7/php.ini
 
-#NGINX
-RUN apk add nginx
-
-#SUPERVISOR
-RUN apk add supervisor && rm -rf /var/cache/apk/*
-	
 #COMPOSER 
 RUN curl -sS https://getcomposer.org/installer | \
 php -- --install-dir=/usr/bin/ --filename=composer
 
+#SUPERVISOR
+RUN apk add supervisor && rm -rf /var/cache/apk/*
 COPY ./supervisor/conf.d /etc/supervisor/conf.d	
 COPY ./crontabs/default /var/spool/cron/crontabs/
 
-#COPY ./php/index.php /var/www/html/
 #COPY ./php/php-fpm.conf /etc/php7/
 #COPY ./php/www.conf /etc/php7/php-fpm.d/
 
-RUN mkdir -p /run/nginx
+#NGINX
+RUN apk add nginx && mkdir -p /run/nginx
 #COPY ./nginx/default.conf /etc/nginx/conf.d/
-#COPY ./nginx/ssl.default.config /etc/nginx/conf.d/
 #COPY ./nginx/nginx.conf /etc/nginx/
 
 WORKDIR /var/www/html/
