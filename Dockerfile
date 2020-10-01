@@ -82,6 +82,7 @@ COPY ./crontabs/default /var/spool/cron/crontabs/
 #Php Base Setting
 COPY ./php/php-fpm.conf /etc/php7/
 COPY ./php/www.conf /etc/php7/php-fpm.d/
+COPY ./php/index.php /var/www/html/
 
 #Nginx
 RUN apk add nginx && mkdir -p /run/nginx
