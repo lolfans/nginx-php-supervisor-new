@@ -21,5 +21,5 @@ docker images 就能看见你的镜像了 放到任何环境都能运行 /var/ww
 
 对性能有更多要求 可以自行调整上面php文件夹与nginx文件夹下的对应文件
 
-镜像地址 docker pull registry.cn-qingdao.aliyuncs.com/liudashuai/nginx-php-supervisor-new:latest
+镜像地址: docker pull registry.cn-qingdao.aliyuncs.com/liudashuai/nginx-php-supervisor-new:latest
 
