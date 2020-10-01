@@ -50,11 +50,6 @@ RUN apk update && apk upgrade && apk add \
 		php7-fpm@community \
 		&& rm -rf /var/cache/apk/*
 
-#alpine system-time
-RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-	&& echo "Asia/Shanghai" > /etc/timezone \
-	&& apk del tzdata
-	
 # Environments
 ENV TIMEZONE            Asia/Shanghai
 ENV PHP_MEMORY_LIMIT    512M
@@ -62,6 +57,11 @@ ENV MAX_UPLOAD          50M
 ENV PHP_MAX_FILE_UPLOAD 200
 ENV PHP_MAX_POST        100M
 ENV COMPOSER_ALLOW_SUPERUSER 1
+
+#alpine system-time
+RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+	&& echo "${TIMEZONE}" > /etc/timezone \
+	&& apk del tzdata
 
 #php.ini setting
 RUN	sed -i "s|;*date.timezone =.*|date.timezone = ${TIMEZONE}|i" /etc/php7/php.ini && \
