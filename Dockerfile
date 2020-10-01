@@ -16,8 +16,8 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 
 
 RUN apk update && apk upgrade && apk add \
-		gnu-libiconv@community \
-		php7-curl \
+	    gnu-libiconv@community \
+	    php7-curl@community \
 	    php7@community \
 	    php7-dev@community \
 	    php7-apcu@community \
