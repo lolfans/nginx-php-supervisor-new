@@ -17,8 +17,7 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 
 RUN apk update && apk upgrade && apk add \
 		gnu-libiconv@community \
-		curl \
-		tzdata \
+		php7-curl \
 	    php7@community \
 	    php7-dev@community \
 	    php7-apcu@community \
@@ -57,7 +56,6 @@ RUN apk update && apk upgrade && apk add \
 		php7-memcached@community \
 		php7-xmlreader@community \
 		php7-fpm@community \
-		&& apk del tzdata \
 		&& rm -rf /var/cache/apk/*
 
 
