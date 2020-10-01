@@ -1,20 +1,10 @@
-#https://mirrors.aliyun.com/alpine/
 FROM alpine:3.10
 
 MAINTAINER lolfans <313273766@qq.com>
 
-#添加阿里云的alpine镜像源
 RUN echo '@community https://mirrors.aliyun.com/alpine/v3.10/community' >> /etc/apk/repositories
-#将国际源都换成阿里源
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
-# Environments
-ENV TIMEZONE            Asia/Shanghai
-ENV PHP_MEMORY_LIMIT    512M
-ENV MAX_UPLOAD          50M
-ENV PHP_MAX_FILE_UPLOAD 200
-ENV PHP_MAX_POST        100M
-ENV COMPOSER_ALLOW_SUPERUSER 1
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 #更新源并安装需要的软件包
 RUN apk update && apk upgrade && apk add \
@@ -65,6 +55,14 @@ RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 	&& echo "Asia/Shanghai" > /etc/timezone \
 	&& apk del tzdata
 	
+# Environments
+ENV TIMEZONE            Asia/Shanghai
+ENV PHP_MEMORY_LIMIT    512M
+ENV MAX_UPLOAD          50M
+ENV PHP_MAX_FILE_UPLOAD 200
+ENV PHP_MAX_POST        100M
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
 #php.ini setting
 RUN	sed -i "s|;*date.timezone =.*|date.timezone = ${TIMEZONE}|i" /etc/php7/php.ini && \
 	sed -i "s|;*memory_limit =.*|memory_limit = ${PHP_MEMORY_LIMIT}|i" /etc/php7/php.ini && \
@@ -82,13 +80,15 @@ RUN apk add supervisor && rm -rf /var/cache/apk/*
 COPY ./supervisor/conf.d /etc/supervisor/conf.d	
 COPY ./crontabs/default /var/spool/cron/crontabs/
 
-#COPY ./php/php-fpm.conf /etc/php7/
-#COPY ./php/www.conf /etc/php7/php-fpm.d/
+#php base setting
+COPY ./php/php-fpm.conf /etc/php7/
+COPY ./php/www.conf /etc/php7/php-fpm.d/
 
 #NGINX
 RUN apk add nginx && mkdir -p /run/nginx
-#COPY ./nginx/default.conf /etc/nginx/conf.d/
-#COPY ./nginx/nginx.conf /etc/nginx/
+#nginx base setting
+COPY ./nginx/default.conf /etc/nginx/conf.d/
+COPY ./nginx/nginx.conf /etc/nginx/
 
 WORKDIR /var/www/html/
 
