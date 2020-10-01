@@ -6,7 +6,6 @@ RUN echo '@community https://mirrors.aliyun.com/alpine/v3.10/community' >> /etc/
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
-#更新源并安装需要的软件包
 RUN apk update && apk upgrade && apk add \
 	    	gnu-libiconv@community \
 	    	php7-curl@community \
@@ -58,12 +57,12 @@ ENV PHP_MAX_FILE_UPLOAD 200
 ENV PHP_MAX_POST        100M
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
-#alpine system-time
+#Alpine System Time
 RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 	&& echo "${TIMEZONE}" > /etc/timezone \
 	&& apk del tzdata
 
-#php.ini setting
+#Php.ini Setting
 RUN	sed -i "s|;*date.timezone =.*|date.timezone = ${TIMEZONE}|i" /etc/php7/php.ini && \
 	sed -i "s|;*memory_limit =.*|memory_limit = ${PHP_MEMORY_LIMIT}|i" /etc/php7/php.ini && \
 	sed -i "s|;*upload_max_filesize =.*|upload_max_filesize = ${MAX_UPLOAD}|i" /etc/php7/php.ini && \
@@ -71,22 +70,22 @@ RUN	sed -i "s|;*date.timezone =.*|date.timezone = ${TIMEZONE}|i" /etc/php7/php.i
 	sed -i "s|;*post_max_size =.*|post_max_size = ${PHP_MAX_POST}|i" /etc/php7/php.ini && \
 	sed -i "s|;*cgi.fix_pathinfo=.*|cgi.fix_pathinfo= 0|i" /etc/php7/php.ini
 
-#COMPOSER 
+#Composer install
 RUN curl -sS https://getcomposer.org/installer | \
 php -- --install-dir=/usr/bin/ --filename=composer
 
-#SUPERVISOR
+#SUPERVISOR Install And Edit Setting
 RUN apk add supervisor && rm -rf /var/cache/apk/*
 COPY ./supervisor/conf.d /etc/supervisor/conf.d	
 COPY ./crontabs/default /var/spool/cron/crontabs/
 
-#php base setting
+#Php Base Setting
 COPY ./php/php-fpm.conf /etc/php7/
 COPY ./php/www.conf /etc/php7/php-fpm.d/
 
-#NGINX
+#Nginx
 RUN apk add nginx && mkdir -p /run/nginx
-#nginx base setting
+#Nginx Base Setting
 COPY ./nginx/default.conf /etc/nginx/conf.d/
 COPY ./nginx/nginx.conf /etc/nginx/
 
