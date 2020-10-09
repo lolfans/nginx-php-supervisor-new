@@ -71,7 +71,7 @@ RUN	sed -i "s|;*date.timezone =.*|date.timezone = ${TIMEZONE}|i" /etc/php7/php.i
 	sed -i "s|;*cgi.fix_pathinfo=.*|cgi.fix_pathinfo= 0|i" /etc/php7/php.ini
 
 #Composer install
-RUN curl -sS https://getcomposer.org/installer | \
+RUN curl -sS http://getcomposer.org.mirrors.china-speed.org.cn/installer | \
 php -- --install-dir=/usr/bin/ --filename=composer
 
 #SUPERVISOR Install And Edit Setting
