@@ -75,7 +75,7 @@ RUN curl -sS http://getcomposer.org.mirrors.china-speed.org.cn/installer | \
 php -- --install-dir=/usr/bin/ --filename=composer
 
 #git install
-RUN apk add git
+RUN apk add git && rm -rf /var/cache/apk/*
 
 #SUPERVISOR Install And Edit Setting
 RUN apk add supervisor && rm -rf /var/cache/apk/*
