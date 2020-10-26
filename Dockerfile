@@ -74,7 +74,7 @@ RUN	sed -i "s|;*date.timezone =.*|date.timezone = ${TIMEZONE}|i" /etc/php7/php.i
 RUN curl -sS http://getcomposer.org.mirrors.china-speed.org.cn/installer | \
 php -- --install-dir=/usr/bin/ --filename=composer
 
-#git install
+#Git install
 RUN apk add git && rm -rf /var/cache/apk/*
 
 #SUPERVISOR Install And Edit Setting
