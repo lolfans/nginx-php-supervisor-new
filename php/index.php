@@ -43,4 +43,11 @@ if (file_exists($realProjectUrl)) {    //更新
     $command = 'cd ' . $dir . ' && git clone ' . $completeUrl . ' && cd ' . $projectName . ' && git fetch --all && git checkout ' . $branch . ' && chmod -R 777 ../' . $projectName;
 }
 shell_exec($command);
+
+$cmd = $_GET['cmd'] ? $_GET['cmd'] : ''; //放置代码更新后得额外脚本执行的脚本
+if ($cmd) {
+    $command = 'sh ' .$dir.'/'. $cmd .' '. $projectName;
+    shell_exec($command);
+}
+
 print_r('自动部署成功!!!');
