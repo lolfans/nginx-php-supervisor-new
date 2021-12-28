@@ -48,6 +48,7 @@ $cmd = $_GET['cmd'] ? $_GET['cmd'] : ''; //放置代码更新后得额外脚本�
 if ($cmd) {
     $command = 'sh ' .$dir.'/'. $cmd .' '. $projectName;
     shell_exec($command);
+    print_r($cmd.'脚本执行完毕!!!');
 }
 
 print_r('自动部署成功!!!');
