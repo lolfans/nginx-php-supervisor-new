@@ -22,7 +22,7 @@ $branchEvent = str_replace('refs/heads/', '', $dataArray['ref']);    //提取分
 $branch = $_GET['branch'];
 
 if ($branchEvent != $branch) {
-    print_r('数据异常提交分支与期望分支不吻合，不作自动部署处理') ;
+    print_r('提交分支与期望分支不吻合，不作自动部署处理') ;
 }
 $dir = $_GET['dst_dir'] ? $_GET['dst_dir'] : './';
 if (! file_exists($dir)) {
