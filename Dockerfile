@@ -1,8 +1,8 @@
-FROM alpine:3.10
+FROM alpine:3.13
 
 MAINTAINER lolfans <313273766@qq.com>
 
-RUN echo '@community https://mirrors.aliyun.com/alpine/v3.10/community' >> /etc/apk/repositories
+RUN echo '@community https://mirrors.aliyun.com/alpine/v3.13/community' >> /etc/apk/repositories
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
